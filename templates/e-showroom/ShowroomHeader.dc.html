@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="background:var(--ml-ivory);border-bottom:1px solid var(--ml-ink-20);font-family:var(--font-arabic)">
+<sc-if value="{{ notMobile }}" hint-placeholder-val="{{ true }}">
+<div style="max-width:1320px;margin:0 auto;height:76px;display:flex;align-items:center;gap:24px;padding:0 clamp(20px,4cqi,56px);box-sizing:border-box">
+<button type="button" onClick="{{ goHome }}" aria-label="الرئيسية" style="border:0;background:none;padding:0;cursor:pointer;display:flex;flex-shrink:0"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Logo" size="{{ 38 }}" hint-size="180px,38px"></x-import></button>
+<nav style="flex:1;display:flex;justify-content:center;align-self:stretch;gap:4px;min-width:0">
+<sc-for list="{{ links }}" as="l" hint-placeholder-count="3">
+<sc-if value="{{ l.on }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ l.go }}" style="border:0;background:none;cursor:pointer;padding:0 14px;display:flex;align-items:center;font-family:inherit;font-size:15px;font-weight:500;color:var(--ml-ink);box-shadow:inset 0 -2px 0 var(--ml-ochre);white-space:nowrap">{{ l.label }}</button></sc-if>
+<sc-if value="{{ l.off }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ l.go }}" style="border:0;background:none;cursor:pointer;padding:0 14px;display:flex;align-items:center;font-family:inherit;font-size:15px;color:var(--ml-ink-70);white-space:nowrap;transition:color 140ms" style-hover="color:var(--ml-ink)">{{ l.label }}</button></sc-if>
+</sc-for>
+</nav>
+<div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+<button type="button" onClick="{{ openInquiry }}" aria-label="قائمة الاستفسار" style="position:relative;width:44px;height:44px;border-radius:999px;border:1px solid var(--ml-ink-20);background:transparent;color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color 140ms" style-hover="border-color:var(--ml-ink)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><sc-if value="{{ hasInquiry }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;left:-4px;min-width:20px;height:20px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--ml-ochre);color:#fff;font-family:var(--font-latin);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ inquiryCount }}</span></sc-if></button>
+<sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" variant="secondary" size="sm" onClick="{{ openVisit }}" hint-size="112px,36px">احجز زيارة</x-import></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+<div style="height:60px;display:flex;align-items:center;gap:8px;padding:0 12px 0 16px;box-sizing:border-box">
+<sc-if value="{{ showBack }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ goBack }}" aria-label="رجوع" style="width:44px;height:44px;margin-inline-start:-8px;border:0;background:none;color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></sc-if>
+<button type="button" onClick="{{ goHome }}" aria-label="الرئيسية" style="border:0;background:none;padding:0;cursor:pointer;display:flex"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Logo" size="{{ 28 }}" hint-size="134px,28px"></x-import></button>
+<a href="{{ waLink }}" target="_blank" rel="noopener" aria-label="واتساب" style="margin-inline-start:auto;width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:var(--ml-ink)"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.SocialIcon" name="whatsapp" size="{{ 22 }}" color="var(--ml-ink)" hint-size="22px,22px"></x-import></a>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const inHalls = !!(p.isHall || p.isPiece);
+    return {
+      links: [
+        { label: 'الرئيسية', go: p.goHome, on: !!p.isHome, off: !p.isHome },
+        { label: 'القاعات', go: p.goHalls, on: inHalls, off: !inHalls },
+        { label: 'زيارة المعرض', go: p.openVisit, on: false, off: true }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+/* Magic Look — colour. HEX values from Identity System p.03 are authoritative. */
+:root{
+--ml-ochre:#7B5D08;--ml-ink:#17191B;--ml-ivory:#F4F0E8;--ml-white:#FFFFFF;
+/* derived tints (ochre/ink/ivory mixes) */
+--ml-ochre-700:#5E4706;--ml-ochre-300:#B49A5E;--ml-ochre-100:#E6DCC4;
+--ml-ink-70:#4A4C4E;--ml-ink-50:#8B8C8D;--ml-ink-20:#D1CFCB;
+--ml-ivory-deep:#F6EBDB;--ml-ivory-shade:#E9E2D5;
+/* semantic */
+--surface-page:var(--ml-ivory);--surface-card:var(--ml-ivory-deep);--surface-raised:var(--ml-white);--surface-inverse:var(--ml-ink);--surface-accent:var(--ml-ochre);
+--text-primary:var(--ml-ink);--text-secondary:var(--ml-ink-70);--text-muted:var(--ml-ink-50);--text-inverse:var(--ml-ivory);--text-accent:var(--ml-ochre);--text-on-accent:var(--ml-white);
+--border-hairline:var(--ml-ink-20);--border-accent:var(--ml-ochre);--border-strong:var(--ml-ink);
+--brand-mark:var(--ml-ochre);
+--focus-ring:var(--ml-ochre-300);
+--pattern-opacity-ivory:.13; /* @kind other */
+--pattern-opacity-ink:.10; /* @kind other */
+
+--danger:#9A2E1F;--success:#4F6B3A;
+}

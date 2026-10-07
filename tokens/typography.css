@@ -1,0 +1,11 @@
+:root{
+--font-arabic:"Noto Kufi Arabic",system-ui,sans-serif;
+--font-latin:"Almarai","Noto Kufi Arabic",system-ui,sans-serif;
+--font-brand:"Almarai","Noto Kufi Arabic",sans-serif;
+--weight-regular:400;--weight-medium:500;--weight-bold:700;
+--tracking-signature:.18em;--tracking-caps:.08em;--tracking-body:0;
+--text-display:64px;--text-h1:44px;--text-h2:32px;--text-h3:24px;--text-lg:18px;--text-body:16px;--text-sm:14px;--text-xs:12px;
+--leading-tight:1.2;--leading-snug:1.4;--leading-body:1.7;
+/* semantic */
+--font-heading:var(--font-arabic);--font-body:var(--font-arabic);--font-label:var(--font-latin);
+}
