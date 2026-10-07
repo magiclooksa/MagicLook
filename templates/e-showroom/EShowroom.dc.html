@@ -7,222 +7,128 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="E-showroom" description="Magic Look online showroom — responsive and adaptive: home, halls catalog, piece detail with detail hotspots, inquiry list and visit booking" -->
-<helmet><script src="./ds-base.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script><script src="./showroom-motion.js"></script><style>html,body{margin:0;height:100%;background:#E9E2D5}</style></helmet>
+<!-- @template name="E-showroom" description="Magic Look website — responsive and adaptive: home, about, solutions, work process, halls catalog, piece detail with hotspots, inquiry list, visit booking and nav menu" -->
+<helmet><script src="./ds-base.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script><style>html,body{margin:0;height:100%;background:#E9E2D5}</style></helmet>
 <div ref="{{ outerRef }}" style="height:100vh;height:100dvh;box-sizing:border-box;display:flex;align-items:center;justify-content:center">
 <div ref="{{ frameRef }}" dir="rtl" lang="ar" style="position:relative;width:100%;height:100%;overflow:hidden;container-type:inline-size;background:var(--ml-ivory);color:var(--ml-ink);font-family:var(--font-arabic)">
 <div ref="{{ scrollRef }}" style="position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden">
-<dc-import name="ShowroomHeader" style="position:sticky;top:0;z-index:20" hint-size="100%,76px" is-mobile="{{ isMobile }}" not-mobile="{{ notMobile }}" is-desktop="{{ isDesktop }}" is-home="{{ isHome }}" is-hall="{{ isHall }}" is-piece="{{ isPiece }}" go-home="{{ goHome }}" go-halls="{{ goHalls }}" open-visit="{{ openVisit }}" open-inquiry="{{ openInquiry }}" inquiry-count="{{ count }}" has-inquiry="{{ hasInquiry }}" show-back="{{ isPiece }}" go-back="{{ goBack }}" wa-link="{{ waLink }}"></dc-import>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+<dc-import name="LayoutHeader" style="position:sticky;top:0;z-index:20" hint-size="100%,76px" vm="{{ vm.header }}"></dc-import>
 <main>
-<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}"><dc-import name="ShowroomHome" hint-size="100%,2600px" card-style="{{ cardStyle }}" is-mobile="{{ isMobile }}" halls="{{ halls }}" featured="{{ pieces }}" hero-photo="{{ heroPhoto }}" hero-pattern="{{ heroPattern }}" cal="{{ cal }}" no-cal="{{ noCal }}" go-halls="{{ goHalls }}" open-visit="{{ openVisit }}" open-chair="{{ openChair }}" open-maps="{{ openMaps }}"></dc-import></sc-if>
-<sc-if value="{{ isHall }}" hint-placeholder-val="{{ false }}"><dc-import name="ShowroomHall" hint-size="100%,1400px" card-style="{{ cardStyle }}" kicker="{{ hallKicker }}" title="{{ hallTitle }}" subtitle="{{ hallSubtitle }}" hall-tabs="{{ hallTabs }}" items="{{ hallItems }}" is-desktop="{{ isDesktop }}" not-desktop="{{ notDesktop }}" go-home="{{ goHome }}" wa-link="{{ waLink }}"></dc-import></sc-if>
-<sc-if value="{{ isPiece }}" hint-placeholder-val="{{ false }}"><dc-import name="ShowroomPiece" hint-size="100%,2000px" card-style="{{ cardStyle }}" piece="{{ piece }}" related="{{ related }}" is-mobile="{{ isMobile }}" not-mobile="{{ notMobile }}" go-home="{{ goHome }}" go-hall="{{ goPieceHall }}" go-halls="{{ goHalls }}" toggle="{{ togglePiece }}" save-text="{{ pieceSaveText }}" open-visit="{{ openVisit }}" wa-link="{{ pieceWa }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isHome }}" hint-placeholder-val="{{ false }}"><dc-import name="PageHome" hint-size="100%,2600px" vm="{{ vm.home }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isAbout }}" hint-placeholder-val="{{ false }}"><dc-import name="PageAbout" hint-size="100%,3200px" vm="{{ vm.about }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isSolutions }}" hint-placeholder-val="{{ false }}"><dc-import name="PageSolutions" hint-size="100%,4200px" vm="{{ vm.solutions }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isProcess }}" hint-placeholder-val="{{ false }}"><dc-import name="PageProcess" hint-size="100%,2600px" vm="{{ vm.process }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isHall }}" hint-placeholder-val="{{ false }}"><dc-import name="PageHall" hint-size="100%,1400px" vm="{{ vm.hall }}"></dc-import></sc-if>
+<sc-if value="{{ vm.page.isPiece }}" hint-placeholder-val="{{ false }}"><dc-import name="PagePiece" hint-size="100%,2000px" vm="{{ vm.piece }}"></dc-import></sc-if>
 </main>
-<dc-import name="ShowroomFooter" hint-size="100%,440px" halls="{{ halls }}" go-home="{{ goHome }}" go-halls="{{ goHalls }}" open-visit="{{ openVisit }}" wa-link="{{ waLink }}" open-maps="{{ openMaps }}"></dc-import>
-<sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}"><div style="height:84px"></div></sc-if>
-</div>
-<sc-if value="{{ showTabBar }}" hint-placeholder-val="{{ false }}">
-<nav aria-label="التنقل" style="position:absolute;left:0;right:0;bottom:0;z-index:30;height:68px;padding-bottom:env(safe-area-inset-bottom);background:var(--ml-ivory);border-top:1px solid var(--ml-ink-20);display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
-<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ goHome }}" aria-current="page" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ochre)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</button></sc-if>
-<sc-if value="{{ notHome }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ goHome }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</button></sc-if>
-<sc-if value="{{ isHall }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ goHalls }}" aria-current="page" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ochre)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 21V10a6 6 0 0 1 12 0v11"></path><path d="M3 21h18"></path></svg>القاعات</button></sc-if>
-<sc-if value="{{ notHall }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ goHalls }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 21V10a6 6 0 0 1 12 0v11"></path><path d="M3 21h18"></path></svg>القاعات</button></sc-if>
-<button type="button" onClick="{{ openInquiry }}" style="position:relative;border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><span style="position:relative;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><sc-if value="{{ hasInquiry }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;left:-10px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--ml-ochre);color:#fff;font-family:var(--font-latin);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ count }}</span></sc-if></span>الاستفسار</button>
-<button type="button" onClick="{{ openVisit }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>زيارة</button>
-</nav>
+<dc-import name="LayoutFooter" hint-size="100%,440px" vm="{{ vm.footer }}"></dc-import>
+<sc-if value="{{ vm.viewport.isMobile }}" hint-placeholder-val="{{ false }}"><div style="height:84px"></div></sc-if>
 </sc-if>
-<sc-if value="{{ showPieceBar }}" hint-placeholder-val="{{ false }}">
-<div style="position:absolute;left:0;right:0;bottom:0;z-index:30;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:var(--ml-ivory);border-top:1px solid var(--ml-ink-20);display:flex;gap:10px;align-items:center">
-<button type="button" onClick="{{ togglePiece }}" aria-label="{{ pieceSaveText }}" style="width:56px;height:56px;flex-shrink:0;border-radius:999px;border:1px solid var(--ml-ink-20);background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{ pieceIconFill }}" stroke="{{ pieceIconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
-<div style="flex:1;min-width:0"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" size="lg" full-width="{{ true }}" onClick="{{ openPieceWa }}" hint-size="100%,56px">استفسر عبر واتساب</x-import></div>
 </div>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ vm.tabBar.visible }}" hint-placeholder-val="{{ false }}"><dc-import name="LayoutTabBar" style="position:absolute;left:0;right:0;bottom:0;z-index:30" hint-size="100%,68px" vm="{{ vm.tabBar }}"></dc-import></sc-if>
+<sc-if value="{{ vm.pieceBar.visible }}" hint-placeholder-val="{{ false }}"><dc-import name="LayoutPieceBar" style="position:absolute;left:0;right:0;bottom:0;z-index:30" hint-size="100%,80px" vm="{{ vm.pieceBar }}"></dc-import></sc-if>
+<sc-if value="{{ vm.overlay.inquiry }}" hint-placeholder-val="{{ false }}"><dc-import name="OverlayInquiry" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:60" hint-size="100%,100%" vm="{{ vm.inquiry }}"></dc-import></sc-if>
+<sc-if value="{{ vm.overlay.menu }}" hint-placeholder-val="{{ false }}"><dc-import name="OverlayMenu" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:65" hint-size="100%,100%" vm="{{ vm.menu }}"></dc-import></sc-if>
+<sc-if value="{{ vm.overlay.visit }}" hint-placeholder-val="{{ false }}"><dc-import name="OverlayVisit" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:70" hint-size="100%,100%" vm="{{ vm.visit }}"></dc-import></sc-if>
 </sc-if>
-<sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}"><dc-import name="ShowroomInquiry" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:60" hint-size="100%,100%" is-mobile="{{ isMobile }}" items="{{ inquiry }}" count="{{ count }}" has-items="{{ hasInquiry }}" is-empty="{{ noInquiry }}" close="{{ closeOverlays }}" send-wa="{{ sendListWa }}" open-visit="{{ openVisit }}" go-halls="{{ goHalls }}"></dc-import></sc-if>
-<sc-if value="{{ visitOpen }}" hint-placeholder-val="{{ false }}"><dc-import name="ShowroomVisit" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:70" hint-size="100%,100%" is-mobile="{{ isMobile }}" items="{{ inquiry }}" close="{{ closeOverlays }}" wa-base="{{ waBase }}"></dc-import></sc-if>
 </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;expressive&quot;,&quot;subtle&quot;,&quot;off&quot;],&quot;default&quot;:&quot;expressive&quot;,&quot;tsType&quot;:&quot;'expressive' | 'subtle' | 'off'&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;cardStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;arch&quot;,&quot;framed&quot;,&quot;overlay&quot;,&quot;editorial&quot;,&quot;circle&quot;,&quot;double-arch&quot;,&quot;dark&quot;,&quot;elevated&quot;],&quot;default&quot;:&quot;arch&quot;,&quot;tsType&quot;:&quot;'arch' | 'framed' | 'overlay' | 'editorial' | 'circle' | 'double-arch' | 'dark' | 'elevated'&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;heroStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;photo&quot;,&quot;pattern&quot;],&quot;default&quot;:&quot;photo&quot;,&quot;tsType&quot;:&quot;'photo' | 'pattern'&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;useCalligraphy&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;previewDevice&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;desktop&quot;,&quot;tablet&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto' | 'desktop' | 'tablet' | 'mobile'&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
-const SR_HALLS = [
-  { id: 'armchairs', no: '01', name: 'الكراسي المنفردة', line: 'حضور يلفت وراحة تحتضنك', img: './media/chair-lifestyle.jpg', pos: '50% 75%' },
-  { id: 'majlis', no: '02', name: 'المجالس والكنب', line: 'جماله في تفاصيله', img: './media/sofa.jpg', pos: '42% 50%' },
-  { id: 'bedrooms', no: '03', name: 'غرف النوم', line: 'أناقة تسكن تفاصيلك', img: './media/bedroom.jpg', pos: '50% 60%' },
-  { id: 'curtains', no: '04', name: 'الستائر', line: 'ضوء ناعم وخصوصية هادئة', img: './media/curtains.jpg', pos: '50% 40%' }
-];
-const SR_PIECES = [
-  { id: 'velvet-armchair', hall: 'armchairs', name: 'كرسي مخملي كحلي', short: 'ملمس مخملي • خشب زان متين',
-    lead: 'كرسي بظهر منحني يحتضن الجلسة، تحيط به أعمدة خشبية محفورة وتنتهي أرجله بأطراف نحاسية.',
-    features: ['ملمس مخملي', 'ظهر بتصميم منحني', 'خشب زان متين'],
-    specs: [['القماش', 'مخمل كحلي'], ['الهيكل', 'خشب زان'], ['الأعمدة', 'خشب بتفاصيل محفورة'], ['الأرجل', 'أطراف نحاسية']],
-    cover: './media/chair-lifestyle.jpg', coverPos: '50% 75%',
-    images: [{ src: './media/chair-lifestyle.jpg', pos: '50% 70%' }, { src: './media/chair-cutout.jpg', fit: 'contain', blend: true }, { src: './media/chair-showroom.jpg', pos: '50% 60%' }, { src: './media/chair-inside.jpg' }],
-    detail: { src: './media/chair-cutout.jpg', ratio: '1/1', blend: true },
-    spots: [{ x: 50, y: 12, label: 'ظهر بتصميم منحني', note: 'خط واحد متصل يلتف حول الجلسة.' }, { x: 50, y: 46, label: 'ملمس مخملي', note: 'مخمل كثيف بلون كحلي عميق.' }, { x: 86.5, y: 40, label: 'خشب بتفاصيل محفورة', note: 'أعمدة جانبية بحفر طولي منتظم.' }, { x: 14, y: 89, label: 'أطراف نحاسية', note: 'لمسة ذهبية تنهي الأرجل.' }] },
-  { id: 'floor-sofa', hall: 'majlis', name: 'كنبة أرضية بمساند أسطوانية', short: 'قماش جاكار منقوش • أرجل كروية',
-    lead: 'جلسة منخفضة على قاعدة خشبية داكنة، بوسائد جاكار منقوشة ومساند أسطوانية بحواف مخيطة.',
-    features: ['قماش جاكار منقوش', 'مساند أسطوانية', 'أرجل كروية'],
-    specs: [['المقعد', 'قماش ناعم بحواف داكنة'], ['الوسائد', 'جاكار منقوش'], ['القاعدة', 'خشب بلون داكن'], ['الأرجل', 'كروية']],
-    cover: './media/sofa.jpg', coverPos: '42% 50%',
-    images: [{ src: './media/sofa.jpg', pos: '45% 50%' }, { src: './media/sofa-details.jpg' }],
-    detail: { src: './media/sofa.jpg', ratio: '1500/1027' },
-    spots: [{ x: 41, y: 24, label: 'وسائد جاكار منقوشة', note: 'نقش بارز يمنح الوسائد عمقاً وملمساً.' }, { x: 90, y: 28, label: 'مساند أسطوانية', note: 'حواف داكنة مخيطة على طرفي المسند.' }, { x: 47, y: 46, label: 'حواف مخيطة', note: 'خط داكن يرسم حدود المقعد.' }, { x: 73, y: 75, label: 'قاعدة بأرجل كروية', note: 'قاعدة خشبية داكنة ترفع الجلسة قليلاً عن الأرض.' }] },
-  { id: 'upholstered-bed', hall: 'bedrooms', name: 'سرير منجّد بلون رملي', short: 'رأس منجّد • قماش ناعم الملمس',
-    lead: 'سرير بخطوط هادئة، رأسه وإطاره منجّدان بقماش ناعم بلون رملي يتناغم مع الخشب الدافئ.',
-    features: ['رأس سرير منجّد', 'قماش ناعم الملمس', 'إطار بحواف مستديرة'],
-    specs: [['التنجيد', 'قماش ناعم بلون رملي'], ['الرأس', 'منجّد بارتفاع كامل'], ['الإطار', 'منجّد بحواف مستديرة']],
-    cover: './media/bedroom.jpg', coverPos: '50% 60%',
-    images: [{ src: './media/bedroom.jpg', pos: '50% 60%' }],
-    detail: { src: './media/bedroom.jpg', ratio: '1536/1024' },
-    spots: [{ x: 47.5, y: 47, label: 'رأس سرير منجّد', note: 'لوح عريض بتنجيد مشدود.' }, { x: 47, y: 84, label: 'إطار بحواف مستديرة', note: 'إطار منجّد يحيط بالمرتبة.' }, { x: 68, y: 60, label: 'كومودينو خشبي', note: 'قطعة مستديرة من الخشب الدافئ بجانب السرير.' }] },
-  { id: 'pleated-curtain', hall: 'curtains', name: 'ستارة بطيات منتظمة', short: 'طيات منتظمة • تفصيل حسب المقاس',
-    lead: 'ستارة تنسدل من السقف حتى الأرض بطيات منتظمة، وتُفصّل حسب ارتفاع المساحة وعرضها.',
-    features: ['طيات منتظمة', 'تركيب مخفي في السقف', 'تفصيل حسب المقاس'],
-    specs: [['القماش', 'قماش ثقيل بلون رملي'], ['التركيب', 'مجرى مخفي في السقف'], ['المقاس', 'حسب المساحة']],
-    cover: './media/curtains.jpg', coverPos: '50% 40%',
-    images: [{ src: './media/curtains.jpg' }],
-    detail: { src: './media/curtains.jpg', ratio: '560/1024' },
-    spots: [{ x: 45, y: 7, label: 'تركيب مخفي في السقف', note: 'المجرى يختفي داخل السقف مع إضاءة غير مباشرة.' }, { x: 46, y: 46, label: 'طيات منتظمة', note: 'طيات متساوية على كامل العرض.' }, { x: 45, y: 72, label: 'طول يلامس الأرض', note: 'تُفصّل لتلامس الأرض بدقة.' }] }
-];
-const SR_WA = 'https://wa.me/966510657389';
-const SR_KEY = 'ml-showroom-inquiry';
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;expressive&quot;,&quot;subtle&quot;,&quot;off&quot;],&quot;default&quot;:&quot;expressive&quot;,&quot;tsType&quot;:&quot;'expressive' | 'subtle' | 'off'&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;heroStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;photo&quot;,&quot;pattern&quot;],&quot;default&quot;:&quot;photo&quot;,&quot;tsType&quot;:&quot;'photo' | 'pattern'&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;useCalligraphy&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Showroom&quot;},&quot;previewDevice&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;desktop&quot;,&quot;tablet&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto' | 'desktop' | 'tablet' | 'mobile'&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+// Composition root: loads the application + infrastructure layers, wires browser adapters into the
+// application's ports, and hands one presenter-built view model per screen region to the view components.
+const MODULE_PATHS = { application: './application/index.js', infrastructure: './infrastructure/index.js' };
+const STORAGE_KEY = 'ml-showroom-inquiry';
+const DEFAULT_MOTION = 'expressive';
+const DEFAULT_DEVICE = 'auto';
+
+const loadModule = path => import(new URL(path, document.baseURI).href);
 
 class Component extends DCLogic {
-  state = { w: 1280, route: { s: 'home' }, list: [], drawer: false, visit: false };
+  state = { route: null, savedIds: [], overlay: null, width: 0 };
+  outerRef = React.createRef();
   frameRef = React.createRef();
   scrollRef = React.createRef();
-  outerRef = React.createRef();
-  applyFrame() {
-    const o = this.outerRef.current, f = this.frameRef.current;
-    if (!o || !f) return;
-    const dev = this.props.previewDevice || 'auto';
-    const D = { desktop: [1280, 820, 20], tablet: [834, 1112, 20], mobile: [390, 844, 36] }[dev];
-    o.style.padding = D ? '24px' : '0';
-    f.style.maxWidth = D ? D[0] + 'px' : 'none';
-    f.style.maxHeight = D ? D[1] + 'px' : 'none';
-    f.style.borderRadius = D ? D[2] + 'px' : '0';
-    f.style.boxShadow = D ? '0 30px 80px -30px rgba(23,25,27,.45), 0 0 0 1px rgba(23,25,27,.08)' : 'none';
+  disposers = [];
+
+  async componentDidMount() {
+    const [application, infrastructure] = await Promise.all([loadModule(MODULE_PATHS.application), loadModule(MODULE_PATHS.infrastructure)]);
+    if (this.unmounted) return;
+    this.infra = infrastructure;
+    this.app = application.createShowroomApp({ storage: infrastructure.createLocalStorage(STORAGE_KEY) });
+    this.history = infrastructure.createHashHistory(hash => this.showRoute(this.app.parseHash(hash)));
+    this.actions = this.createActions();
+    const frame = this.frameRef.current;
+    this.disposers.push(
+      () => this.history.dispose(),
+      infrastructure.observeWidth(frame, width => this.setState({ width })),
+      infrastructure.onEscape(this.actions.closeOverlays)
+    );
+    this.applyDeviceFrame();
+    const width = (frame && frame.clientWidth) || window.innerWidth;
+    this.setState({ ...this.app.initialState(this.history.current()), width }, () => this.startMotion());
   }
-  bootMotion() {
-    clearTimeout(this.mt);
-    if (this.motion) { this.motion.destroy(); this.motion = null; }
-    let n = 0;
-    const tryInit = () => {
-      const ok = window.ShowroomMotion && window.gsap && window.ScrollTrigger && this.frameRef.current && this.scrollRef.current;
-      if (ok && (window.Lenis || n >= 20)) {
-        this.motion = new window.ShowroomMotion({ frame: this.frameRef.current, scroller: this.scrollRef.current, mode: this.props.motion || 'expressive' });
-      } else if (n++ < 100) this.mt = setTimeout(tryInit, 100);
-    };
-    tryInit();
-  }
+
   componentDidUpdate(prev) {
-    if (prev.previewDevice !== this.props.previewDevice) this.applyFrame();
-    if (prev.motion !== this.props.motion) this.bootMotion();
+    if (!this.infra) return;
+    if (prev.previewDevice !== this.props.previewDevice) this.applyDeviceFrame();
+    if (prev.motion !== this.props.motion) this.startMotion();
   }
-  componentDidMount() {
-    this.applyFrame();
-    this.bootMotion();
-    const el = this.frameRef.current;
-    if (el && window.ResizeObserver) {
-      this.ro = new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if (w && w !== this.state.w) this.setState({ w }); });
-      this.ro.observe(el);
-    }
-    let list = [];
-    try { list = JSON.parse(localStorage.getItem(SR_KEY) || '[]').filter(id => SR_PIECES.some(p => p.id === id)); } catch (e) {}
-    this.setState({ w: (el && el.clientWidth) || window.innerWidth, route: this.parse(), list });
-    this.onPop = () => this.setState({ route: this.parse(), drawer: false, visit: false }, () => this.arrive());
-    this.onKey = e => { if (e.key === 'Escape') this.setState({ drawer: false, visit: false }); };
-    window.addEventListener('popstate', this.onPop);
-    window.addEventListener('keydown', this.onKey);
-  }
+
   componentWillUnmount() {
-    clearTimeout(this.mt);
-    if (this.motion) this.motion.destroy();
-    if (this.ro) this.ro.disconnect();
-    window.removeEventListener('popstate', this.onPop);
-    window.removeEventListener('keydown', this.onKey);
+    this.unmounted = true;
+    this.stopMotion();
+    this.disposers.forEach(dispose => dispose());
   }
-  parse() {
-    const h = (location.hash || '').replace(/^#\/?/, '').split('/');
-    if (h[0] === 'hall') return { s: 'hall', hall: SR_HALLS.some(x => x.id === h[1]) ? h[1] : 'all' };
-    if (h[0] === 'piece' && SR_PIECES.some(p => p.id === h[1])) return { s: 'piece', id: h[1] };
-    return { s: 'home' };
-  }
-  go(route) {
-    const hash = route.s === 'home' ? '#/' : route.s === 'hall' ? '#/hall/' + (route.hall || 'all') : '#/piece/' + route.id;
-    try { history.pushState(null, '', hash); } catch (e) {}
-    this.setState({ route, drawer: false, visit: false }, () => this.arrive());
-  }
-  arrive() {
-    if (this.motion) { this.motion.toTop(); this.motion.route(); }
-    else { const s = this.scrollRef.current; if (s) s.scrollTop = 0; }
-  }
-  toggle(id) {
-    this.setState(s => {
-      const list = s.list.includes(id) ? s.list.filter(x => x !== id) : [...s.list, id];
-      try { localStorage.setItem(SR_KEY, JSON.stringify(list)); } catch (e) {}
-      return { list };
-    });
-  }
-  renderVals() {
-    const s = this.state, w = s.w, r = s.route, pr = this.props;
-    const isMobile = w < 640, isDesktop = w >= 1024;
-    const isHome = r.s === 'home', isHall = r.s === 'hall', isPiece = r.s === 'piece';
-    const hallById = {}; SR_HALLS.forEach(h => { hallById[h.id] = h; });
-    const enc = encodeURIComponent;
-    const pieces = SR_PIECES.map(p => {
-      const h = hallById[p.hall], inList = s.list.includes(p.id);
-      return { ...p, hallName: h.name, hallNo: h.no,
-        feats: p.features.map((t, i) => ({ t, dot: i > 0 })), specs: p.specs.map(([k, v]) => ({ k, v })),
-        inList, notInList: !inList,
-        saveLabel: inList ? 'إزالة من قائمة الاستفسار' : 'أضف إلى قائمة الاستفسار',
-        saveText: inList ? 'في قائمة الاستفسار' : 'أضف إلى قائمة الاستفسار',
-        iconFill: inList ? 'var(--ml-ochre)' : 'none', iconStroke: inList ? 'var(--ml-ochre)' : 'currentColor',
-        open: () => this.go({ s: 'piece', id: p.id }),
-        toggle: e => { if (e && e.stopPropagation) e.stopPropagation(); this.toggle(p.id); },
-        remove: () => this.toggle(p.id) };
-    });
-    const activeHall = isHall && r.hall !== 'all' ? hallById[r.hall] : null;
-    const hallTabs = [{ id: 'all', no: '—', label: 'كل القطع' }].concat(SR_HALLS.map(h => ({ id: h.id, no: h.no, label: h.name }))).map(t => {
-      const on = (r.hall || 'all') === t.id;
-      return { ...t, on, off: !on,
-        open: () => this.go({ s: 'hall', hall: t.id }) };
-    });
-    const piece = isPiece ? pieces.find(p => p.id === r.id) : null;
-    const inquiry = s.list.map(id => pieces.find(p => p.id === id)).filter(Boolean);
-    const waLink = SR_WA + '?text=' + enc('مرحباً، أود الاستفسار عن قطع معرض النظرة الساحرة.');
-    const pieceWa = piece ? SR_WA + '?text=' + enc('مرحباً، أود الاستفسار عن: ' + piece.name) : waLink;
-    const heroPhoto = (pr.heroStyle || 'photo') === 'photo';
-    const cal = pr.useCalligraphy !== false;
+
+  createActions() {
     return {
-      frameRef: this.frameRef, scrollRef: this.scrollRef, outerRef: this.outerRef,
-      isMobile, notMobile: !isMobile, isDesktop, notDesktop: !isDesktop,
-      isHome, isHall, isPiece, notHome: !isHome, notHall: !isHall,
-      heroPhoto, heroPattern: !heroPhoto, cal, noCal: !cal, cardStyle: pr.cardStyle || 'arch',
-      halls: SR_HALLS.map(h => ({ ...h, open: () => this.go({ s: 'hall', hall: h.id }) })),
-      pieces,
-      hallTabs, hallItems: activeHall ? pieces.filter(p => p.hall === activeHall.id) : pieces,
-      hallKicker: activeHall ? 'القاعة ' + activeHall.no : 'القاعات',
-      hallTitle: activeHall ? activeHall.name : 'كل القطع',
-      hallSubtitle: activeHall ? activeHall.line : 'مختارات من قاعات المعرض الأربع',
-      piece, related: piece ? pieces.filter(p => p.id !== piece.id).slice(0, 3) : [],
-      pieceSaveText: piece ? piece.saveText : '', pieceIconFill: piece ? piece.iconFill : 'none', pieceIconStroke: piece ? piece.iconStroke : 'currentColor',
-      togglePiece: () => piece && this.toggle(piece.id),
-      goPieceHall: () => this.go({ s: 'hall', hall: piece ? piece.hall : 'all' }),
-      inquiry, count: inquiry.length, hasInquiry: inquiry.length > 0, noInquiry: inquiry.length === 0,
-      waBase: SR_WA, waLink, pieceWa,
-      openPieceWa: () => window.open(pieceWa, '_blank', 'noopener'),
-      sendListWa: () => window.open(SR_WA + '?text=' + enc('مرحباً، أود الاستفسار عن القطع التالية:\n' + inquiry.map(p => '• ' + p.name).join('\n')), '_blank', 'noopener'),
-      openMaps: () => window.open('https://www.google.com/maps/search/?api=1&query=' + enc('الدمام حي المنار شارع ابوبكر الصديق'), '_blank', 'noopener'),
-      goHome: () => this.go({ s: 'home' }),
-      goHalls: () => this.go({ s: 'hall', hall: 'all' }),
-      goBack: () => this.go({ s: 'hall', hall: piece ? piece.hall : 'all' }),
-      openChair: () => this.go({ s: 'piece', id: 'velvet-armchair' }),
-      openInquiry: () => this.setState({ drawer: true, visit: false }),
-      openVisit: () => this.setState({ visit: true, drawer: false }),
-      closeOverlays: () => this.setState({ drawer: false, visit: false }),
-      drawerOpen: s.drawer, visitOpen: s.visit,
-      showTabBar: isMobile && !isPiece, showPieceBar: isMobile && !!piece
+      navigate: route => this.navigate(route),
+      openOverlay: overlay => this.setState({ overlay }),
+      closeOverlays: () => this.setState({ overlay: null }),
+      toggleSaved: id => this.setState(state => ({ savedIds: this.app.toggleSaved(state.savedIds, id) })),
+      openExternal: this.infra.openExternal
     };
+  }
+
+  navigate(route) {
+    this.history.push(this.app.toHash(route));
+    this.showRoute(route);
+  }
+
+  showRoute(route) {
+    this.setState({ route, overlay: null }, () => {
+      if (!this.motion) return;
+      this.motion.toTop();
+      this.motion.routeChanged();
+    });
+  }
+
+  applyDeviceFrame() {
+    this.infra.applyDeviceFrame(this.outerRef.current, this.frameRef.current, this.props.previewDevice || DEFAULT_DEVICE);
+  }
+
+  startMotion() {
+    this.stopMotion();
+    this.motion = this.infra.startMotion({ frame: this.frameRef.current, scroller: this.scrollRef.current, mode: this.props.motion || DEFAULT_MOTION });
+  }
+
+  stopMotion() {
+    if (this.motion) this.motion.destroy();
+    this.motion = null;
+  }
+
+  presentationOptions() {
+    return { heroStyle: this.props.heroStyle || 'photo', useCalligraphy: this.props.useCalligraphy !== false };
+  }
+
+  renderVals() {
+    const refs = { outerRef: this.outerRef, frameRef: this.frameRef, scrollRef: this.scrollRef };
+    if (!this.app || !this.state.route) return { ...refs, ready: false, vm: {} };
+    const vm = this.app.present({ ...this.state, options: this.presentationOptions() }, this.actions);
+    return { ...refs, ready: true, vm };
   }
 }
 </script>

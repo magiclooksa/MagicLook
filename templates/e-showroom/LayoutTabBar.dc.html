@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<nav aria-label="التنقل" style="height:68px;padding-bottom:env(safe-area-inset-bottom);background:var(--ml-ivory);border-top:1px solid var(--ml-ink-20);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));font-family:var(--font-arabic)">
+<sc-if value="{{ homeActive }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ vm.goHome }}" aria-current="page" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ochre)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</button></sc-if><sc-if value="{{ homeIdle }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ vm.goHome }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</button></sc-if>
+<sc-if value="{{ hallsActive }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ vm.goHalls }}" aria-current="page" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ochre)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 21V10a6 6 0 0 1 12 0v11"></path><path d="M3 21h18"></path></svg>القاعات</button></sc-if><sc-if value="{{ hallsIdle }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ vm.goHalls }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 21V10a6 6 0 0 1 12 0v11"></path><path d="M3 21h18"></path></svg>القاعات</button></sc-if>
+<button type="button" onClick="{{ vm.openInquiry }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><span style="position:relative;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><sc-if value="{{ vm.hasSaved }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;left:-10px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--ml-ochre);color:var(--ml-white);font-family:var(--font-latin);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ vm.savedCount }}</span></sc-if></span>الاستفسار</button>
+<button type="button" onClick="{{ vm.openVisit }}" style="border:0;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--ml-ink-70)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>زيارة</button>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const vm = this.props.vm || {};
+    return { homeActive: Boolean(vm.homeActive), homeIdle: !vm.homeActive, hallsActive: Boolean(vm.hallsActive), hallsIdle: !vm.hallsActive };
+  }
+}
+</script>
+</body>
+</html>

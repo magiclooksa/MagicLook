@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div data-screen-label="About" style="font-family:var(--font-arabic);color:var(--ml-ink)">
+<section style="max-width:1320px;margin:0 auto;padding:clamp(24px,4cqi,56px) clamp(20px,4cqi,56px) 0;box-sizing:border-box;display:flex;flex-direction:column;gap:clamp(20px,3cqi,40px)">
+<dc-import name="UiBreadcrumb" trail="{{ vm.breadcrumb.trail }}" current="{{ vm.breadcrumb.current }}" hint-size="100%,20px"></dc-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,6cqi,96px);align-items:center">
+<div style="display:flex;flex-direction:column;gap:20px;max-width:580px">
+<span style="font-family:var(--font-latin);font-size:13px;color:var(--ml-ochre)">{{ vm.hero.kicker }}</span>
+<h1 style="margin:0;font-size:clamp(34px,5cqi,60px);font-weight:500;line-height:1.25">{{ vm.hero.title }}</h1>
+<p style="margin:0;font-size:clamp(18px,1.8cqi,22px);line-height:1.7;color:var(--ml-ochre)">{{ vm.hero.lead }}</p>
+<div style="width:56px;height:2px;background:var(--ml-ochre)"></div>
+<p style="margin:0;font-size:clamp(16px,1.5cqi,18px);line-height:1.9;color:var(--ml-ink-70);text-wrap:pretty">{{ vm.hero.body }}</p>
+</div>
+<div data-anim="mask" style="aspect-ratio:4/5;max-height:640px;width:100%;justify-self:center;border-radius:999px 999px 0 0;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ vm.hero.image.src }}" alt="{{ vm.hero.image.alt }}" style="width:100%;height:100%;object-fit:cover;object-position:50% 70%;display:block"></div>
+</div>
+</section>
+<section data-screen-label="About intro" style="max-width:1320px;margin:0 auto;padding:clamp(72px,10cqi,140px) clamp(20px,4cqi,56px) 0;box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(24px,6cqi,96px);align-items:start">
+<dc-import name="UiSectionHeading" kicker="{{ vm.intro.kicker }}" title="{{ vm.intro.title }}" hint-size="100%,120px"></dc-import>
+<div data-anim="rise" style="display:flex;flex-direction:column;gap:18px;font-size:17px;line-height:1.9;text-wrap:pretty">
+<p style="margin:0">{{ vm.intro.lead }}</p>
+<sc-for list="{{ vm.intro.paragraphs }}" as="paragraph" hint-placeholder-count="2"><p style="margin:0;color:var(--ml-ink-70)">{{ paragraph }}</p></sc-for>
+</div>
+</section>
+<section data-screen-label="Value" style="max-width:1320px;margin:0 auto;padding:clamp(72px,10cqi,140px) clamp(20px,4cqi,56px) 0;box-sizing:border-box">
+<div data-anim="rise" style="background:var(--ml-ivory-deep);border-radius:clamp(24px,3cqi,40px);padding:clamp(36px,6cqi,96px) clamp(24px,6cqi,96px);display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center">
+<x-import component-from-global-scope="MagicLookDesignSystem_1440af.LogoMark" size="{{ 34 }}" hint-size="46px,34px"></x-import>
+<p style="margin:0;font-size:clamp(22px,3cqi,36px);font-weight:500;line-height:1.6;max-width:900px;text-wrap:balance">{{ vm.value.statement }}</p>
+<div style="width:56px;height:2px;background:var(--ml-ochre)"></div>
+<p style="margin:0;font-size:17px;line-height:1.8;color:var(--ml-ink-70);max-width:640px">{{ vm.value.note }}</p>
+</div>
+</section>
+<section data-screen-label="Vision and mission" style="margin-top:clamp(72px,10cqi,140px);background:var(--ml-ink);color:var(--ml-ivory);position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url(../../assets/pattern/pattern-tile-ivory.svg);background-size:240px 240px;opacity:.10"></div>
+<div style="position:relative;max-width:1320px;margin:0 auto;padding:clamp(56px,8cqi,112px) clamp(20px,4cqi,56px);box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(48px,6cqi,96px)">
+<div style="display:flex;flex-direction:column;gap:20px">
+<h2 style="margin:0;font-size:clamp(28px,4cqi,44px);font-weight:500;line-height:1.3">{{ vm.vision.title }}</h2>
+<div style="width:56px;height:2px;background:var(--ml-ochre-300)"></div>
+<p style="margin:0;font-size:clamp(16px,1.5cqi,18px);line-height:1.9;color:var(--ml-ivory-shade);text-wrap:pretty">{{ vm.vision.lead }}</p>
+<dc-import name="UiBulletList" items="{{ vm.vision.points }}" tone="dark" hint-size="100%,120px"></dc-import>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<h2 style="margin:0;font-size:clamp(28px,4cqi,44px);font-weight:500;line-height:1.3">{{ vm.mission.title }}</h2>
+<div style="width:56px;height:2px;background:var(--ml-ochre-300)"></div>
+<p style="margin:0;font-size:clamp(18px,2cqi,24px);line-height:1.8;text-wrap:pretty">{{ vm.mission.text }}</p>
+</div>
+</div>
+</section>
+<section data-screen-label="Why Magic Look" style="max-width:1320px;margin:0 auto;padding:clamp(72px,10cqi,140px) clamp(20px,4cqi,56px) 0;box-sizing:border-box;display:flex;flex-direction:column;gap:clamp(28px,4cqi,48px)">
+<dc-import name="UiSectionHeading" kicker="{{ vm.strengths.kicker }}" title="{{ vm.strengths.title }}" hint-size="100%,90px"></dc-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(28px,3cqi,40px) clamp(20px,3cqi,40px);align-items:start">
+<sc-for list="{{ vm.strengths.items }}" as="strength" hint-placeholder-count="5"><div data-anim="card" style="display:flex;flex-direction:column;gap:12px;padding-top:20px;border-top:1px solid var(--ml-ink-20)"><span style="font-family:var(--font-latin);font-weight:700;font-size:14px;color:var(--ml-ochre)">{{ strength.no }}</span><h3 style="margin:0;font-size:20px;font-weight:500">{{ strength.title }}</h3><p style="margin:0;font-size:15px;line-height:1.8;color:var(--ml-ink-70)">{{ strength.text }}</p>
+<sc-if value="{{ strength.hasTags }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ strength.tags }}" as="tag" hint-placeholder-count="4"><span style="padding:6px 12px;border-radius:999px;background:var(--ml-ivory-deep);font-size:13px">{{ tag }}</span></sc-for></div></sc-if></div></sc-for>
+</div>
+</section>
+<section data-screen-label="Design style" style="max-width:1320px;margin:0 auto;padding:clamp(72px,10cqi,140px) clamp(20px,4cqi,56px) 0;box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,6cqi,96px);align-items:center">
+<div data-anim="mask" style="width:100%;aspect-ratio:1/1;max-height:560px;border-radius:clamp(20px,2.4cqi,32px);overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ vm.style.image.src }}" alt="{{ vm.style.image.alt }}" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block"></div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<dc-import name="UiSectionHeading" kicker="{{ vm.style.kicker }}" title="{{ vm.style.title }}" hint-size="100%,90px"></dc-import>
+<div style="width:56px;height:2px;background:var(--ml-ochre)"></div>
+<dc-import name="UiBulletList" items="{{ vm.style.points }}" hint-size="100%,200px"></dc-import>
+</div>
+</section>
+<section data-screen-label="About CTA" style="max-width:1320px;margin:0 auto;padding:clamp(72px,10cqi,140px) clamp(20px,4cqi,56px);box-sizing:border-box">
+<div style="border-top:1px solid var(--ml-ink-20);padding-top:clamp(40px,6cqi,80px);display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center">
+<h2 style="margin:0;font-size:clamp(28px,4cqi,48px);font-weight:500;line-height:1.3">{{ vm.cta.title }}</h2>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" size="lg" onClick="{{ vm.goSolutions }}" hint-size="170px,56px">استكشف الحلول</x-import><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" variant="secondary" size="lg" onClick="{{ vm.openVisit }}" hint-size="150px,56px">احجز زيارة</x-import></div>
+</div>
+</section>
+</div>
+</x-dc>
+</body>
+</html>

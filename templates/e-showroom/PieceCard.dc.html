@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<sc-if value="{{ vArch }}" hint-placeholder-val="{{ true }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:12px;cursor:pointer;min-width:0;font-family:var(--font-arabic);color:var(--ml-ink)">
+<div style="position:relative;aspect-ratio:3/4;border-radius:999px 999px 0 0;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 480ms cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.03)">
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;bottom:12px;left:12px;width:40px;height:40px;border-radius:999px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="font-size:13px;color:var(--ml-ink-70);line-height:1.6">{{ p.short }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ vFramed }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:14px;padding:10px 10px 18px;border-radius:20px;background:var(--ml-ivory-deep);cursor:pointer;min-width:0;font-family:var(--font-arabic);color:var(--ml-ink);transition:background 200ms" style-hover="background:var(--ml-ivory-shade)">
+<div style="position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--ml-ivory-shade)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block">
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;top:10px;left:10px;width:40px;height:40px;border-radius:12px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;padding:0 6px"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="font-size:13px;color:var(--ml-ink-70);line-height:1.6">{{ p.short }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ vOverlay }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="position:relative;aspect-ratio:3/4;border-radius:20px;overflow:hidden;background:var(--ml-ink);cursor:pointer;min-width:0;font-family:var(--font-arabic)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 480ms cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.04)">
+<div style="position:absolute;left:0;right:0;bottom:0;padding:56px 16px 16px;background:linear-gradient(to top, rgba(23,25,27,.85) 10%, rgba(23,25,27,0));display:flex;flex-direction:column;gap:4px;pointer-events:none"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre-300)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5;color:var(--ml-ivory)">{{ p.name }}</span><sc-if value="{{ hasDesc }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:1.6;color:rgba(244,240,232,.85);text-wrap:pretty">{{ descText }}</span></sc-if></div>
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;top:12px;left:12px;width:40px;height:40px;border-radius:999px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ vEditorial }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:14px;cursor:pointer;min-width:0;font-family:var(--font-arabic);color:var(--ml-ink)">
+<div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92);transition:filter 320ms" style-hover="filter:saturate(1.05)">
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;bottom:0;left:0;width:44px;height:44px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;gap:12px;align-items:baseline;padding-top:12px;border-top:1px solid var(--ml-ink)"><span style="font-family:var(--font-latin);font-size:clamp(20px,2cqi,26px);line-height:1;color:var(--ml-ochre)">{{ num }}</span><div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="font-size:13px;color:var(--ml-ink-50)">{{ p.hallName }}</span></div></div>
+</div>
+</sc-if>
+<sc-if value="{{ vCircle }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;align-items:center;gap:16px;cursor:pointer;min-width:0;text-align:center;font-family:var(--font-arabic);color:var(--ml-ink)">
+<div style="position:relative;width:100%;aspect-ratio:1/1;border-radius:50%;padding:6px;box-sizing:border-box;border:1px solid var(--ml-ink-20);transition:border-color 240ms" style-hover="border-color:var(--ml-ochre)"><div style="width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;bottom:6%;left:6%;width:40px;height:40px;border-radius:999px;border:1px solid var(--ml-ink-20);background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="font-size:13px;color:var(--ml-ink-70);line-height:1.6">{{ p.short }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ vDoubleArch }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;align-items:center;gap:18px;cursor:pointer;min-width:0;text-align:center;font-family:var(--font-arabic);color:var(--ml-ink)">
+<div style="position:relative;width:calc(100% - 10px);aspect-ratio:3/4;margin:10px 10px 0 0"><div style="position:absolute;top:-10px;right:-10px;bottom:10px;left:10px;border:1.5px solid var(--ml-ochre);border-radius:999px 999px 0 0"></div><div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:999px 999px 0 0;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 480ms cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.03)"></div>
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;bottom:12px;left:12px;width:40px;height:40px;border-radius:999px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:clamp(16px,1.5cqi,19px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="width:24px;height:1.5px;background:var(--ml-ochre)"></span><span style="font-size:13px;color:var(--ml-ink-70)">{{ p.hallName }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ vDark }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:16px;padding:12px 12px 20px;border-radius:24px;background:var(--ml-ink);color:var(--ml-ivory);cursor:pointer;min-width:0;font-family:var(--font-arabic)">
+<div style="position:relative;aspect-ratio:3/4;border-radius:999px 999px 12px 12px;overflow:hidden;background:#2A2C2E"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 480ms cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.03)">
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;bottom:12px;left:12px;width:40px;height:40px;border-radius:999px;border:0;background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;padding:0 6px"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre-300)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="font-size:13px;line-height:1.6;color:rgba(244,240,232,.75)">{{ p.short }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ vElevated }}" hint-placeholder-val="{{ false }}">
+<div data-anim="card" onClick="{{ p.open }}" style="display:flex;flex-direction:column;border-radius:20px;overflow:hidden;background:var(--ml-white);box-shadow:var(--shadow-soft);cursor:pointer;min-width:0;font-family:var(--font-arabic);color:var(--ml-ink);transition:transform 240ms cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-4px)">
+<div style="position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--ml-ivory-deep)"><img src="{{ p.cover }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block">
+<sc-if value="{{ showSave }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ p.toggleSaved }}" aria-pressed="{{ p.saved }}" aria-label="{{ p.saveLabel }}" style="position:absolute;top:12px;left:12px;width:40px;height:40px;border-radius:999px;border:0;background:var(--ml-white);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;padding:16px 16px 18px"><span style="font-family:var(--font-latin);font-size:12px;color:var(--ml-ochre)">{{ p.hallName }}</span><span style="font-size:clamp(15px,1.4cqi,18px);font-weight:500;line-height:1.5">{{ p.name }}</span><span style="display:flex;align-items:center;gap:6px;padding-top:6px;font-size:14px;color:var(--ml-ochre)">عرض القطعة<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></span></div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:300,&quot;height&quot;:520},&quot;p&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;arch&quot;,&quot;framed&quot;,&quot;overlay&quot;,&quot;editorial&quot;,&quot;circle&quot;,&quot;double-arch&quot;,&quot;dark&quot;,&quot;elevated&quot;],&quot;default&quot;:&quot;overlay&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;n&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;tsType&quot;:&quot;number&quot;},&quot;showSave&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showDesc&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;desc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const CARD_VARIANTS = ['arch', 'framed', 'overlay', 'editorial', 'circle', 'double-arch', 'dark', 'elevated'];
+const DEFAULT_VARIANT = 'overlay';
+
+class Component extends DCLogic {
+  renderVals() {
+    const { p, variant, n, showSave, showDesc, desc } = this.props;
+    const active = CARD_VARIANTS.includes(variant) ? variant : DEFAULT_VARIANT;
+    const saved = Boolean(p && p.saved);
+    const descText = desc || (showDesc && p ? p.short : '') || '';
+    return {
+      vArch: active === 'arch', vFramed: active === 'framed', vOverlay: active === 'overlay', vEditorial: active === 'editorial',
+      vCircle: active === 'circle', vDoubleArch: active === 'double-arch', vDark: active === 'dark', vElevated: active === 'elevated',
+      num: String((n ?? 0) + 1).padStart(2, '0'),
+      showSave: showSave !== false,
+      iconFill: saved ? 'var(--ml-ochre)' : 'none',
+      iconStroke: saved ? 'var(--ml-ochre)' : 'currentColor',
+      descText,
+      hasDesc: Boolean(descText)
+    };
+  }
+}
+</script>
+</body>
+</html>

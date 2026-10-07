@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:var(--ml-ivory);border-top:1px solid var(--ml-ink-20);display:flex;gap:10px;align-items:center;font-family:var(--font-arabic)">
+<button type="button" onClick="{{ vm.toggleSaved }}" aria-label="{{ vm.saveText }}" aria-pressed="{{ vm.saved }}" style="width:56px;height:56px;flex-shrink:0;border-radius:999px;border:1px solid var(--ml-ink-20);background:var(--ml-ivory);color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{ iconFill }}" stroke="{{ iconStroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+<div style="flex:1;min-width:0"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" size="lg" full-width="{{ true }}" onClick="{{ vm.openWhatsApp }}" hint-size="100%,56px">استفسر عبر واتساب</x-import></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const saved = Boolean(this.props.vm && this.props.vm.saved);
+    return { iconFill: saved ? 'var(--ml-ochre)' : 'none', iconStroke: saved ? 'var(--ml-ochre)' : 'currentColor' };
+  }
+}
+</script>
+</body>
+</html>

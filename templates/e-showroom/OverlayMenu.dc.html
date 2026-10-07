@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div data-screen-label="Menu" role="dialog" aria-modal="true" aria-label="القائمة" style="position:absolute;top:0;left:0;right:0;bottom:0;font-family:var(--font-arabic);color:var(--ml-ink)">
+<div data-anim="scrim" onClick="{{ vm.close }}" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(23,25,27,.45)"></div>
+<div data-anim="panel-menu" style="position:absolute;top:0;bottom:0;right:0;width:min(420px,100%);background:var(--ml-ivory);display:flex;flex-direction:column;box-shadow:var(--shadow-soft);overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url(../../assets/pattern/pattern-tile-ink.svg);background-size:240px 240px;opacity:.05;pointer-events:none"></div>
+<div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px;padding:0 12px 0 16px;border-bottom:1px solid var(--ml-ink-20)">
+<x-import component-from-global-scope="MagicLookDesignSystem_1440af.Logo" size="{{ 28 }}" hint-size="134px,28px"></x-import>
+<button type="button" onClick="{{ vm.close }}" aria-label="إغلاق" style="width:44px;height:44px;border:0;border-radius:999px;background:none;color:var(--ml-ink);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+</div>
+<nav aria-label="التنقل الرئيسي" style="position:relative;flex:1;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column">
+<sc-for list="{{ links }}" as="link" hint-placeholder-count="5"><sc-if value="{{ link.active }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ link.select }}" aria-current="page" style="border:0;border-bottom:1px solid var(--ml-ink-20);background:none;padding:18px 0;cursor:pointer;font-family:inherit;font-size:22px;font-weight:500;color:var(--ml-ochre);display:flex;align-items:center;gap:12px;text-align:start"><span style="width:8px;height:8px;border-radius:50%;background:var(--ml-ochre)"></span>{{ link.label }}</button></sc-if><sc-if value="{{ link.idle }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ link.select }}" style="border:0;border-bottom:1px solid var(--ml-ink-20);background:none;padding:18px 0;cursor:pointer;font-family:inherit;font-size:22px;font-weight:500;color:var(--ml-ink);display:flex;align-items:center;gap:12px;text-align:start"><span style="width:8px;height:8px;border-radius:50%;background:transparent"></span>{{ link.label }}</button></sc-if></sc-for>
+</nav>
+<div style="position:relative;padding:20px 24px 28px;display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--ml-ink-20);background:var(--ml-ivory)">
+<x-import component-from-global-scope="MagicLookDesignSystem_1440af.Button" size="lg" full-width="{{ true }}" onClick="{{ vm.openVisit }}" hint-size="100%,56px">احجز زيارة</x-import>
+<a href="{{ vm.whatsappLink }}" target="_blank" rel="noopener" style="height:48px;border-radius:999px;border:1px solid var(--ml-ink);display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;color:var(--ml-ink);text-decoration:none"><x-import component-from-global-scope="MagicLookDesignSystem_1440af.SocialIcon" name="whatsapp" size="{{ 18 }}" color="var(--ml-ink)" hint-size="18px,18px"></x-import>تواصل عبر واتساب</a>
+<span style="font-size:13px;line-height:1.7;color:var(--ml-ink-70)">{{ vm.address }}</span>
+<span dir="ltr" style="font-family:var(--font-latin);font-weight:700;font-size:14px;letter-spacing:.02em;text-align:end">{{ vm.phonesLine }}</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const links = (this.props.vm && this.props.vm.links) || [];
+    return { links: links.map(link => ({ ...link, idle: !link.active })) };
+  }
+}
+</script>
+</body>
+</html>
