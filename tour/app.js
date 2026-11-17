@@ -197,6 +197,7 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
     <button class="chip" id="annos" title="إظهار / إخفاء المقاسات والنصوص">📐</button>
     <button class="chip" id="thumbs" title="شريط الغرف">◉</button>
     <button class="chip" id="clean" title="عرض نظيف بدون أزرار (H)">👁</button>
+    <button class="chip" id="vrBtn" title="عرض بنظارة الواقع الافتراضي (Meta Quest)" style="display:none"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 8.5c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v6.2a2 2 0 0 1-2 2h-3.3a2 2 0 0 1-1.7-1l-.9-1.6a1.3 1.3 0 0 0-2.2 0l-.9 1.6a2 2 0 0 1-1.7 1H5a2 2 0 0 1-2-2z"/><circle cx="8" cy="11.5" r="1.6"/><circle cx="16" cy="11.5" r="1.6"/></svg></button>
     <button class="chip" id="fs" title="ملء الشاشة">⛶</button>
     <button class="chip" id="orient" title="تدوير الشاشة أفقي"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="14" height="9" rx="1.6"/><path d="M15 3.5a6 6 0 0 1 5.5 5.5"/><path d="M20.6 6.4 20.5 9l-2.5-.4"/></svg></button>
   </div>
@@ -207,7 +208,7 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
   <div id="fade" class="ui"></div>
   <div id="toast" class="ui"></div>
   <div id="intro" class="ui"><span class="bar"></span><h1 id="introTitle"></h1><p id="introSub"></p><button class="chip on go" id="introGo">ابدأ الجولة</button></div>
-  <a-scene vr-mode-ui="enabled: true" loading-screen="enabled:false" renderer="colorManagement: true; antialias: true">
+  <a-scene vr-mode-ui="enabled: false" webxr="referenceSpaceType: local-floor; optionalFeatures: local-floor, hand-tracking" loading-screen="enabled:false" renderer="colorManagement: true; antialias: true">
     <a-assets></a-assets>
     <a-sky id="sky" radius="50" color="#14110f"></a-sky>
     <a-entity id="world"></a-entity>
@@ -220,6 +221,8 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
       </a-camera>
       <a-entity laser-controls="hand: right" raycaster="objects: .spot; far: 60"></a-entity>
       <a-entity laser-controls="hand: left" raycaster="objects: .spot; far: 60"></a-entity>
+      <a-entity id="handR" hand-tracking-controls="hand: right; modelColor: #d6c9b5"></a-entity>
+      <a-entity id="handL" hand-tracking-controls="hand: left; modelColor: #d6c9b5"></a-entity>
     </a-entity>
   </a-scene>`;
   document.body.insertAdjacentHTML('beforeend', html);
@@ -330,6 +333,34 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
   }
   const look = () => $('cam').components['look-controls'];
 
+  /* ---- headset: top-bottom stereo panoramas get one sphere per eye (three.js XR: layer 1 = left, 2 = right) ---- */
+  let eyeSpheres = null;
+  function setStereo(s) {
+    if (eyeSpheres) { eyeSpheres.forEach(m => { scEl.object3D.remove(m); m.geometry.dispose(); m.material.map.dispose(); m.material.dispose(); }); eyeSpheres = null; }
+    if (s && s.stereo) {
+      const img = imgOf(s);
+      const make = (half, layer) => {
+        const tex = new THREE.Texture(img); if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+        tex.repeat.set(1, 0.5); tex.offset.set(0, half); tex.needsUpdate = true;
+        const m = new THREE.Mesh(new THREE.SphereGeometry(49, 96, 48), new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, toneMapped: false }));
+        m.scale.set(-1, 1, 1); m.layers.set(layer); m.renderOrder = -50; m.frustumCulled = false; return m;
+      };
+      const go = () => { if (cur !== s.id || eyeSpheres) return; eyeSpheres = [make(0.5, 1), make(0, 2)]; eyeSpheres.forEach(m => scEl.object3D.add(m)); vrSky(); };
+      whenLoaded(img).then(go);
+    }
+    vrSky();
+  }
+  let vrLab = null;
+  function vrLabel(t) {
+    const cam = $('cam').object3D; if (vrLab) cam.remove(vrLab);
+    vrLab = textPlane(t, BEIGE, true, 0.09); vrLab.position.set(0, -0.12, -1.1); cam.add(vrLab);
+    const me = vrLab; setTimeout(() => { if (vrLab === me) { cam.remove(me); vrLab = null; } }, 1800);
+  }
+  function vrSky() {
+    const inVR = scEl.is('vr-mode'), st = !!eyeSpheres;
+    if (eyeSpheres) eyeSpheres.forEach(m => { m.visible = inVR; });
+    const sk = $('sky'); if (sk && sk.object3D) sk.object3D.visible = !(inVR && st);
+  }
   function show(id, view) {
     { const tp = document.getElementById('tip'); if (tp) tp.style.display = 'none'; }
     const s = scene(id); if (!s) return;
@@ -340,6 +371,8 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
       shader: 'flat', side: 'back', npot: true, color: '#ffffff', src: '#pano-' + s.id,
       repeat: s.stereo ? '1 0.5' : '1 1', offset: s.stereo ? '0 0.5' : '0 0'
     });
+    setStereo(s);
+    if (scEl.is('vr-mode')) vrLabel(s.name);
     const lc = look(), v = view || s.view;
     if (lc && view !== false) { lc.yawObject.rotation.y = v ? v.yaw : 0; lc.pitchObject.rotation.x = v ? v.pitch : 0; }
     draw(); refreshUI();
@@ -611,7 +644,9 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
   }
   function walkForward() {
     const lc = look(); if (!lc || !cur) return;
-    const yaw = lc.yawObject.rotation.y, fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+    let fwd;
+    if (scEl.is('vr-mode') && scEl.camera) { fwd = new THREE.Vector3(); scEl.camera.getWorldDirection(fwd); fwd.y = 0; fwd.normalize(); }
+    else { const yaw = lc.yawObject.rotation.y; fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw)); }
     let best = null;
     tour.links.filter(l => l.from === cur).forEach(l => {
       const d = linkDir(l); const h = new THREE.Vector3(d.x, 0, d.z).normalize(); const a = Math.acos(Math.max(-1, Math.min(1, h.dot(fwd))));
@@ -963,6 +998,22 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
       await Promise.race([so.lock('landscape'), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 1500))]);
     } catch (e) { $('rotHint').style.display = 'flex'; setTimeout(() => { $('rotHint').style.display = 'none'; }, 2600); }
   };
+  // ---- Meta Quest / WebXR ----
+  if (navigator.xr && navigator.xr.isSessionSupported) navigator.xr.isSessionSupported('immersive-vr').then(ok => { if (ok) { $('vrBtn').style.display = ''; document.body.classList.add('xr'); } }).catch(() => {});
+  $('vrBtn').onclick = () => { $('intro').style.display = 'none'; scEl.enterVR(); };
+  let stickT = 0;
+  scEl.addEventListener('thumbstickmoved', e => {
+    const d = e.detail || {}, now = Date.now(); if (now - stickT < 450) return;
+    if (Math.abs(d.x) > 0.75) { $('rig').object3D.rotation.y += (d.x > 0 ? -1 : 1) * Math.PI / 6; stickT = now; }   // snap turn 30°
+    else if (d.y < -0.75) { walkForward(); stickT = now + 600; }                                                     // push forward = walk
+  });
+  // B / Y button = next room (the room strip is not visible inside the headset)
+  ['bbuttondown', 'ybuttondown'].forEach(ev => scEl.addEventListener(ev, () => {
+    if (!tour.scenes.length) return; const i = tour.scenes.findIndex(x => x.id === cur);
+    show(tour.scenes[(i + 1) % tour.scenes.length].id, false);
+  }));
+  // hand tracking: pinch while looking at an arrow (gaze ring) = click
+  ['handR', 'handL'].forEach(id => { const h = $(id); if (h) h.addEventListener('pinchended', () => { const g = $('gaze'); const r = g && g.components.raycaster; const hit = r && r.intersectedEls && r.intersectedEls[0]; if (hit) hit.emit('click'); }); });
   $('fs').onclick = () => { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); };
   let lastInteract = 0;
   ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(ev => document.addEventListener(ev, () => { lastInteract = Date.now(); }, { passive: true }));
@@ -985,8 +1036,8 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
 
   /* ---------------- wiring ---------------- */
   $('cancel').onclick = () => { $('pick').style.display = 'none'; mode = 'view'; refreshUI(); };
-  scEl.addEventListener('enter-vr', () => { const g = $('gaze'); g.setAttribute('visible', true); g.setAttribute('raycaster', 'enabled', true); g.setAttribute('cursor', 'fuse', true); });
-  scEl.addEventListener('exit-vr', () => { const g = $('gaze'); g.setAttribute('visible', false); g.setAttribute('raycaster', 'enabled', false); g.setAttribute('cursor', 'fuse', false); });
+  scEl.addEventListener('enter-vr', () => { const g = $('gaze'); g.setAttribute('visible', true); g.setAttribute('raycaster', 'enabled', true); g.setAttribute('cursor', 'fuse', true); vrSky(); });
+  scEl.addEventListener('exit-vr', () => { const g = $('gaze'); g.setAttribute('visible', false); g.setAttribute('raycaster', 'enabled', false); g.setAttribute('cursor', 'fuse', false); $('rig').object3D.rotation.y = 0; vrSky(); });
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
     if (e.key === 'Escape') { mode = 'view'; pendingA = null; $('pick').style.display = 'none'; document.body.classList.remove('clean'); draw(); refreshUI(); }
