@@ -1,0 +1,19 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>جولات 360 - النظرة الساحرة</title>
+<meta name="theme-color" content="#253a35"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="جولات 360">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png">
+<style>html,body{margin:0;height:100%;background:#16231f}#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#d6c9b5;font:16px Tahoma,sans-serif}</style>
+<script id="aframe-lib" src="aframe.min.js?v=d97ada0d"></script></head><body><div id="boot">جارٍ التحميل...</div>
+<script id="app" src="app.js?v=d97ada0d"></script>
+<script>document.getElementById('boot').remove();
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;const b=document.getElementById('installBtn');if(b)b.style.display='';});
+addEventListener('load',()=>{
+  const bar=document.getElementById('bar');
+  if(bar&&!new URLSearchParams(location.search).get('t')&&!matchMedia('(display-mode: standalone)').matches){
+    const b=document.createElement('button');b.id='installBtn';b.className='chip';b.textContent='⬇ تثبيت كتطبيق';b.style.display=deferredInstall?'':'none';
+    b.onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.remove();};bar.appendChild(b);}
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+});</script></body></html>
