@@ -144,7 +144,8 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
   #intro h1{margin:0;font-size:34px;color:var(--beige);font-weight:700} #intro p{margin:0;color:var(--muted)}
   #intro .go{font-size:17px;padding:12px 28px;border-radius:30px}
   label.chip input{display:none}
-  .a-enter-vr{bottom:auto!important;top:auto!important;right:auto!important;left:62px!important;bottom:16px!important}
+  .a-enter-vr,.a-enter-ar,.a-orientation-modal{display:none!important}
+  #vrMsg{top:50%;left:50%;transform:translate(-50%,-50%);max-width:min(90vw,460px);text-align:center;line-height:1.8;display:none;z-index:46;font-size:14px}
   canvas.a-canvas{cursor:grab} canvas.a-canvas.hot{cursor:pointer} canvas.a-canvas.place{cursor:crosshair}
   @media (max-width:760px){#wm img{height:28px}#wm{bottom:auto;top:58px}#side{width:auto;left:10px;max-height:30vh;top:auto;bottom:130px}#props{top:auto;bottom:130px;width:auto;right:10px}#hint{display:none!important}.pl{width:66px}.pl .ball{width:58px;height:58px}}
   `;
@@ -205,10 +206,11 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
   <div id="empty" class="ui"><div>ابدأ بـ <b>＋ صور 360</b> واختر صور البانوراما من D5، أو <b>📂 فتح جولة</b> محفوظة.<br>
     بعدها: <b>🔗 انتقال</b> للأبواب، <b>📏 مقاس</b> للقياس الهندسي، <b>🅃 نص</b> و <b>⭐ أيقونة</b> للملاحظات.</div></div>
   <div id="rotHint" class="ui"><div><svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg><p>لف الجوال بشكل أفقي</p></div></div>
+  <div id="vrMsg" class="ui chip"></div>
   <div id="fade" class="ui"></div>
   <div id="toast" class="ui"></div>
-  <div id="intro" class="ui"><span class="bar"></span><h1 id="introTitle"></h1><p id="introSub"></p><button class="chip on go" id="introGo">ابدأ الجولة</button></div>
-  <a-scene vr-mode-ui="enabled: false" webxr="referenceSpaceType: local-floor; optionalFeatures: local-floor, hand-tracking" loading-screen="enabled:false" renderer="colorManagement: true; antialias: true">
+  <div id="intro" class="ui"><span class="bar"></span><h1 id="introTitle"></h1><p id="introSub"></p><div class="row" style="justify-content:center"><button class="chip on go" id="introGo">ابدأ الجولة</button><button class="chip go" id="introVR" style="display:none">🥽 ابدأ بالنظارة</button></div></div>
+  <a-scene xr-mode-ui="enabled: false" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" webxr="referenceSpaceType: local-floor; optionalFeatures: bounded-floor, hand-tracking" loading-screen="enabled:false" renderer="colorManagement: true; antialias: true">
     <a-assets></a-assets>
     <a-sky id="sky" radius="50" color="#14110f"></a-sky>
     <a-entity id="world"></a-entity>
@@ -999,8 +1001,25 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
     } catch (e) { $('rotHint').style.display = 'flex'; setTimeout(() => { $('rotHint').style.display = 'none'; }, 2600); }
   };
   // ---- Meta Quest / WebXR ----
-  if (navigator.xr && navigator.xr.isSessionSupported) navigator.xr.isSessionSupported('immersive-vr').then(ok => { if (ok) { $('vrBtn').style.display = ''; document.body.classList.add('xr'); } }).catch(() => {});
-  $('vrBtn').onclick = () => { $('intro').style.display = 'none'; scEl.enterVR(); };
+  if (navigator.xr && navigator.xr.isSessionSupported) navigator.xr.isSessionSupported('immersive-vr').then(ok => { if (ok) { $('vrBtn').style.display = ''; $('introVR').style.display = ''; document.body.classList.add('xr'); } }).catch(() => {});
+  let vrLocal = false;
+  const vrMsg = t => { const m = $('vrMsg'); m.textContent = t; m.style.display = 'block'; setTimeout(() => { m.style.display = 'none'; }, 6000); };
+  $('introVR').onclick = () => $('vrBtn').onclick();
+  $('vrBtn').onclick = async () => {
+    $('intro').style.display = 'none';
+    const sys = scEl.systems.webxr;
+    try { await scEl.enterVR(); }
+    catch (e1) {
+      console.warn('enterVR failed, retrying with a plain local space', e1);
+      // some browsers refuse floor tracking: retry with nothing required
+      sys.sessionConfiguration = { requiredFeatures: [], optionalFeatures: ['hand-tracking'] };
+      sys.sessionReferenceSpaceType = 'local'; vrLocal = true;
+      try { await scEl.enterVR(); }
+      catch (e2) { vrLocal = false; console.error(e2); return vrMsg('تعذر فتح وضع النظارة: ' + ((e2.cause && e2.cause.message) || e2.message) + ' — افتح الجولة من رابط الموقع في متصفح النظارة.'); }
+    }
+    // A-Frame falls back to a flat "fake" VR mode when it thinks no headset exists: leave it and explain
+    if (!scEl.xrSession) { try { scEl.exitVR(); } catch (e) {} vrMsg('المتصفح ما سمح بوضع الواقع الافتراضي. افتح الرابط من متصفح نظارة Meta Quest (Meta Quest Browser).'); }
+  };
   let stickT = 0;
   scEl.addEventListener('thumbstickmoved', e => {
     const d = e.detail || {}, now = Date.now(); if (now - stickT < 450) return;
@@ -1036,8 +1055,8 @@ const ML_BRAND = {"logo": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiB
 
   /* ---------------- wiring ---------------- */
   $('cancel').onclick = () => { $('pick').style.display = 'none'; mode = 'view'; refreshUI(); };
-  scEl.addEventListener('enter-vr', () => { const g = $('gaze'); g.setAttribute('visible', true); g.setAttribute('raycaster', 'enabled', true); g.setAttribute('cursor', 'fuse', true); vrSky(); });
-  scEl.addEventListener('exit-vr', () => { const g = $('gaze'); g.setAttribute('visible', false); g.setAttribute('raycaster', 'enabled', false); g.setAttribute('cursor', 'fuse', false); $('rig').object3D.rotation.y = 0; vrSky(); });
+  scEl.addEventListener('enter-vr', () => { const g = $('gaze'); g.setAttribute('visible', true); g.setAttribute('raycaster', 'enabled', true); g.setAttribute('cursor', 'fuse', true); if (vrLocal) $('rig').object3D.position.y = EYE; vrSky(); });
+  scEl.addEventListener('exit-vr', () => { const g = $('gaze'); g.setAttribute('visible', false); g.setAttribute('raycaster', 'enabled', false); g.setAttribute('cursor', 'fuse', false); $('rig').object3D.rotation.y = 0; $('rig').object3D.position.y = 0; vrSky(); });
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
     if (e.key === 'Escape') { mode = 'view'; pendingA = null; $('pick').style.display = 'none'; document.body.classList.remove('clean'); draw(); refreshUI(); }
